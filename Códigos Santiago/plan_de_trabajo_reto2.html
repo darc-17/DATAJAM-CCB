@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan de Trabajo — Reto 2: Seguridad y Obras Públicas</title>
+    <style>
+        :root {
+            --azul: #1a5276;
+            --azul-claro: #2980b9;
+            --rojo: #c0392b;
+            --verde: #27ae60;
+            --naranja: #e67e22;
+            --gris: #7f8c8d;
+            --fondo: #f8f9fa;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: var(--fondo);
+            padding: 20px;
+        }
+        .container { max-width: 1100px; margin: 0 auto; }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--azul) 0%, var(--azul-claro) 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .header h1 { font-size: 2em; margin-bottom: 10px; }
+        .header h2 { font-weight: 300; font-size: 1.2em; opacity: 0.9; }
+        .header .deadline {
+            background: var(--rojo);
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        /* Sections */
+        .section {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        .section h2 {
+            color: var(--azul);
+            border-bottom: 3px solid var(--azul-claro);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        .section h3 {
+            color: var(--azul-claro);
+            margin: 20px 0 10px 0;
+            font-size: 1.2em;
+        }
+
+        /* Data source cards */
+        .fuente-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .fuente-card {
+            border: 2px solid #eee;
+            border-radius: 8px;
+            padding: 15px;
+            transition: transform 0.2s;
+        }
+        .fuente-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .fuente-card.prioridad-1 { border-left: 5px solid var(--rojo); }
+        .fuente-card.prioridad-2 { border-left: 5px solid var(--naranja); }
+        .fuente-card.prioridad-3 { border-left: 5px solid #f1c40f; }
+        .fuente-card.prioridad-4 { border-left: 5px solid var(--verde); }
+        .fuente-card.prioridad-5 { border-left: 5px solid var(--azul-claro); }
+        .fuente-card .nombre { font-weight: bold; font-size: 1.1em; margin-bottom: 5px; }
+        .fuente-card .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75em;
+            font-weight: bold;
+            color: white;
+            margin-right: 5px;
+        }
+        .badge-obs { background: var(--azul-claro); }
+        .badge-vars { background: var(--verde); }
+        .badge-anios { background: var(--naranja); }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--azul-claro);
+        }
+        .timeline-item {
+            position: relative;
+            padding: 15px 20px 15px 70px;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        .timeline-item::before {
+            content: attr(data-day);
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background: var(--azul-claro);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8em;
+        }
+        .timeline-item.critico::before { background: var(--rojo); }
+        .timeline-item .dia-titulo { font-weight: bold; color: var(--azul); }
+        .timeline-item ul { margin: 8px 0 0 20px; }
+        .timeline-item li { margin-bottom: 5px; }
+
+        /* Hypothesis */
+        .hipotesis {
+            background: #eef6ff;
+            border-left: 4px solid var(--azul-claro);
+            padding: 15px 20px;
+            margin: 10px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .hipotesis strong { color: var(--azul); }
+
+        /* Model card */
+        .modelo-card {
+            background: #f0f7f0;
+            border: 1px solid #c3e6c3;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .modelo-card code {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: var(--azul);
+            color: white;
+            font-weight: 600;
+        }
+        tr:hover { background: #f5f5f5; }
+
+        /* Checklist */
+        .checklist { list-style: none; padding: 0; }
+        .checklist li {
+            padding: 8px 0 8px 30px;
+            position: relative;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .checklist li::before {
+            content: '☐';
+            position: absolute;
+            left: 5px;
+            font-size: 1.2em;
+        }
+
+        /* Alert */
+        .alerta {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .alerta-roja {
+            background: #f8d7da;
+            border-color: var(--rojo);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--gris);
+            font-size: 0.9em;
+        }
+
+        /* Notebook structure */
+        .notebook-struct {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.9em;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        .notebook-struct .folder { color: #569cd6; }
+        .notebook-struct .file { color: #ce9178; }
+        .notebook-struct .comment { color: #6a9955; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<!-- ==================== HEADER ==================== -->
+<div class="header">
+    <h1>Plan de Trabajo — Reto 2</h1>
+    <h2>Seguridad y Obras Públicas en Bogotá</h2>
+    <p style="margin-top:10px; opacity:0.8">Concurso de Datos por la Seguridad — Cámara de Comercio de Bogotá</p>
+    <div class="deadline">ENTREGA: 15 de Marzo de 2026 — 11:59 PM</div>
+</div>
+
+<!-- ==================== 1. RESUMEN EJECUTIVO ==================== -->
+<div class="section">
+    <h2>1. Resumen del Reto</h2>
+    <p><strong>Objetivo:</strong> Analizar la relación entre las obras de transporte público en Bogotá (Primera Línea del Metro, TransMilenio Av. 68, Calle 13) y la percepción de seguridad, con énfasis en las experiencias del empresariado y las MiPymes.</p>
+
+    <h3>Preguntas de investigación</h3>
+    <ol>
+        <li>¿Cómo han afectado las obras de infraestructura la percepción de seguridad de los empresarios en los corredores?</li>
+        <li>¿Existen diferencias significativas entre el corredor del Metro PLM y el de la Calle 13?</li>
+        <li>¿Son las MiPymes más vulnerables que las grandes empresas frente al impacto en seguridad de las obras?</li>
+        <li>¿Qué factores del entorno (iluminación, vigilancia, señalización) explican mejor los cambios en percepción de seguridad?</li>
+        <li>¿Se pueden identificar tramos del Metro con perfiles de seguridad diferenciados para intervenciones focalizadas?</li>
+    </ol>
+</div>
+
+<!-- ==================== 2. FUENTES DE DATOS ==================== -->
+<div class="section">
+    <h2>2. Fuentes de Datos (Prioridad para el Reto 2)</h2>
+    <p>Se identificaron 6 fuentes relevantes. Las primeras 3 son <strong>esenciales</strong>; las demás son complementarias.</p>
+
+    <div class="fuente-grid">
+        <!-- Fuente 1 -->
+        <div class="fuente-card prioridad-1">
+            <div class="nombre">🔴 Enc. Corredores Estratégicos 2024</div>
+            <span class="badge badge-obs">2,105 establecimientos</span>
+            <span class="badge badge-vars">312 variables</span>
+            <p style="margin-top:8px"><strong>LA MÁS IMPORTANTE.</strong> Encuesta directa a negocios en los corredores del Metro PLM (1,202) y Calle 13 (903). Tiene datos de percepción de seguridad desde el inicio de obras, victimización, factores del entorno y opinión sobre el proyecto.</p>
+            <p><strong>Variables clave:</strong> TRAMO, PRIMERA/CALL13 (segmentos), P33G (satisfacción seguridad), P43 (cambio seguridad), P44 (victimización), P45 (soluciones).</p>
+            <p><strong>Archivo:</strong> <code>Encuesta corredores estratégicos/Base corredores estratégicos anonimizada.xlsx</code></p>
+        </div>
+
+        <!-- Fuente 2 -->
+        <div class="fuente-card prioridad-2">
+            <div class="nombre">🟠 Enc. Clima de los Negocios (ECN) 2020–2024</div>
+            <span class="badge badge-obs">~2,500/año</span>
+            <span class="badge badge-anios">5 años</span>
+            <p style="margin-top:8px">Percepción empresarial de seguridad, victimización, ambiente de negocios. Incluye tamaño de empresa (MiPyme/Grande) y sector. Permite análisis temporal 2020-2024.</p>
+            <p><strong>Variables clave:</strong> P56/P56_1 (percepción seguridad), P57 (tendencia), P58 (víctima), P33_H (condiciones de seguridad), F5 (tamaño empresa).</p>
+        </div>
+
+        <!-- Fuente 3 -->
+        <div class="fuente-card prioridad-3">
+            <div class="nombre">🟡 Enc. Movilidad y Entornos Urbanos (EMU) 2024</div>
+            <span class="badge badge-obs">18,865 personas</span>
+            <span class="badge badge-vars">843 variables</span>
+            <p style="margin-top:8px">Percepción ciudadana sobre movilidad, seguridad en entorno urbano y expectativas del Metro. Gran muestra con datos por localidad y UPL.</p>
+            <p><strong>Variables clave:</strong> P131 (seguridad en 22 elementos urbanos), P133 (expectativas Metro), P134 (medidas de seguridad), P129 (satisfacción con Bogotá).</p>
+        </div>
+
+        <!-- Fuente 4 -->
+        <div class="fuente-card prioridad-4">
+            <div class="nombre">🟢 Enc. Percepción y Victimización (EPV) 2021–2025</div>
+            <span class="badge badge-obs">~20,000/año</span>
+            <span class="badge badge-anios">5 años</span>
+            <p style="margin-top:8px">La más grande. Percepción ciudadana con coordenadas GPS, victimización detallada, evaluación policial. Permite análisis temporal y espacial.</p>
+            <p><strong>Variables clave:</strong> P102/P103 (percepción seguridad barrio/Bogotá), P203 (víctima), GPS.</p>
+        </div>
+
+        <!-- Fuente 5 -->
+        <div class="fuente-card prioridad-5">
+            <div class="nombre">🔵 RNMC — Registro de Medidas Correctivas</div>
+            <span class="badge badge-obs">2.9 millones</span>
+            <span class="badge badge-anios">2020–2025</span>
+            <p style="margin-top:8px">Datos administrativos de comparendos policiales por localidad y UPZ. Medida objetiva de actividad infraccional. Permite cruzar datos de percepción con datos reales.</p>
+            <p><strong>Variables clave:</strong> ANIO, NOMBRE_LOCALIDAD, NOMBRE_UPZ, DESCRIPCION_TITULO, DESCRIPCION_COMPORTAMIENTO.</p>
+        </div>
+
+        <!-- Fuente 6 -->
+        <div class="fuente-card prioridad-5">
+            <div class="nombre">⚪ Base Registro Mercantil 2024–2025</div>
+            <span class="badge badge-obs">Variable</span>
+            <p style="margin-top:8px">Universo de empresas activas en Bogotá. Útil para contextualizar la muestra de MiPymes y el tejido empresarial por zona.</p>
+        </div>
+    </div>
+
+    <div class="alerta">
+        <strong>💡 Recomendación:</strong> Concentren el 80% del esfuerzo en la <strong>Encuesta de Corredores Estratégicos</strong> y la <strong>ECN</strong>. Son las fuentes que hablan directamente de la relación obras–seguridad–empresarios. Las demás sirven para complementar y triangular.
+    </div>
+</div>
+
+<!-- ==================== 3. HIPÓTESIS ==================== -->
+<div class="section">
+    <h2>3. Hipótesis a Probar</h2>
+
+    <div class="hipotesis">
+        <strong>H1 — Efecto corredor:</strong> Los establecimientos en el corredor del Metro PLM perciben mayor deterioro de seguridad que los de la Calle 13, controlando por tamaño de empresa y sector.
+    </div>
+
+    <div class="hipotesis">
+        <strong>H2 — Vulnerabilidad MiPyme:</strong> Las micro y pequeñas empresas reportan mayor victimización y peor percepción de seguridad que las medianas y grandes en los corredores de obras.
+    </div>
+
+    <div class="hipotesis">
+        <strong>H3 — Factores de entorno:</strong> La iluminación (P43_1B), la vigilancia en zonas de obra (P43_1G) y la señalización (P43_1A) son los factores más asociados con la percepción de empeoramiento de seguridad.
+    </div>
+
+    <div class="hipotesis">
+        <strong>H4 — Victimización y percepción:</strong> Haber sido víctima de delito asociado a las obras (P44) incrementa significativamente la probabilidad de percibir empeoramiento de seguridad.
+    </div>
+
+    <div class="hipotesis">
+        <strong>H5 — Heterogeneidad espacial:</strong> Existen grupos de tramos del Metro con perfiles de seguridad significativamente diferentes, lo que justifica intervenciones diferenciadas.
+    </div>
+
+    <div class="hipotesis">
+        <strong>H6 — Tendencia temporal (ECN):</strong> La percepción de inseguridad empresarial en Bogotá ha empeorado entre 2020 y 2024, coincidiendo con el avance de las obras de infraestructura.
+    </div>
+</div>
+
+<!-- ==================== 4. METODOLOGÍA ==================== -->
+<div class="section">
+    <h2>4. Metodología</h2>
+
+    <h3>4.1 Herramientas</h3>
+    <table>
+        <tr><th>Herramienta</th><th>Uso</th></tr>
+        <tr><td>Python 3.11+</td><td>Lenguaje principal</td></tr>
+        <tr><td>pandas / numpy</td><td>Manipulación de datos</td></tr>
+        <tr><td>matplotlib / seaborn / plotly</td><td>Visualización</td></tr>
+        <tr><td>statsmodels</td><td>Modelos econométricos (Logit, Probit, OLS)</td></tr>
+        <tr><td>scikit-learn</td><td>Clustering (K-Means, PCA)</td></tr>
+        <tr><td>scipy</td><td>Tests estadísticos</td></tr>
+    </table>
+
+    <h3>4.2 Técnicas Estadísticas</h3>
+
+    <div class="modelo-card">
+        <strong>Modelo 1 — Logit:</strong> Percepción de empeoramiento<br>
+        <code>P(seguridad_empeoro = 1) = Λ(β₀ + β₁·es_metro + β₂·es_mipyme + β₃·iluminación + β₄·vigilancia + ...)</code><br>
+        <em>Variable dependiente:</em> Si la seguridad empeoró desde inicio de obras (P43 = 2)<br>
+        <em>Controles:</em> Corredor, tamaño empresa, sector, factores de entorno
+    </div>
+
+    <div class="modelo-card">
+        <strong>Modelo 2 — Logit:</strong> Victimización<br>
+        <code>P(fue_victima = 1) = Λ(β₀ + β₁·es_metro + β₂·es_mipyme + β₃·satisfacción_entorno + ...)</code><br>
+        <em>Variable dependiente:</em> Si el establecimiento fue víctima de algún delito (P44)<br>
+        <em>Interés:</em> ¿Ser MiPyme aumenta la probabilidad de ser víctima?
+    </div>
+
+    <div class="modelo-card">
+        <strong>Modelo 3 — OLS con errores robustos:</strong> Satisfacción con seguridad<br>
+        <code>P33G = β₀ + β₁·es_metro + β₂·es_mipyme + β₃·fue_victima + β₄·preocupación_obras + ε</code><br>
+        <em>Variable dependiente:</em> Satisfacción con seguridad (1-5)<br>
+        <em>Errores:</em> Heteroskedasticity-consistent (HC1)
+    </div>
+
+    <div class="modelo-card">
+        <strong>Modelo 4 — Logit (ECN):</strong> Victimización empresarial<br>
+        <code>P(víctima_ECN = 1) = Λ(β₀ + β₁·es_mipyme + β₂·sector + β₃·infraestructura + β₄·seguridad_condiciones + ...)</code><br>
+        <em>Fuente:</em> ECN 2024, solo Bogotá<br>
+        <em>Interés:</em> Relación entre infraestructura (P33_C) y victimización
+    </div>
+
+    <div class="modelo-card">
+        <strong>Clustering — K-Means:</strong> Perfiles de segmentos del Metro<br>
+        <em>Variables:</em> Satisfacción seguridad, % empeoramiento, % victimización, factores de entorno<br>
+        <em>Unidad:</em> Promedio por segmento (PRIMERA, 16 tramos)<br>
+        <em>Selección K:</em> Método del codo + Silhouette score<br>
+        <em>Visualización:</em> PCA 2D + Heatmap de perfiles
+    </div>
+
+    <h3>4.3 Análisis complementarios sugeridos</h3>
+    <ul>
+        <li><strong>Análisis temporal con EPV (2021–2025):</strong> Comparar percepción de seguridad en localidades con obras vs. sin obras a lo largo del tiempo (cuasi-DiD).</li>
+        <li><strong>Cruce RNMC × EPV:</strong> Correlacionar comparendos de seguridad (datos objetivos) con percepción de inseguridad (datos subjetivos) por localidad.</li>
+        <li><strong>Análisis espacial (avanzado):</strong> Usar coordenadas GPS de la EPV para mapear "hot spots" de inseguridad percibida cerca de los corredores de obras.</li>
+    </ul>
+</div>
+
+<!-- ==================== 5. ESTRUCTURA DE CÓDIGO ==================== -->
+<div class="section">
+    <h2>5. Estructura del Código</h2>
+
+    <div class="notebook-struct">
+<span class="folder">BD concurso/</span>
+├── <span class="folder">codigo/</span>
+│   ├── <span class="file">requirements.txt</span>          <span class="comment"># Dependencias de Python</span>
+│   ├── <span class="file">01_limpieza_carga_datos.ipynb</span>  <span class="comment"># Notebook 1: Carga y limpieza</span>
+│   ├── <span class="file">02_consolidacion_modelos_clustering.ipynb</span>  <span class="comment"># Notebook 2: Análisis</span>
+│   └── <span class="folder">datos_limpios/</span>            <span class="comment"># (se genera al ejecutar NB1)</span>
+│       ├── corredores_limpio.csv
+│       ├── ecn_2024_bogota.csv
+│       ├── emu_2024_filtrado.csv
+│       ├── epv_2025_filtrado.csv
+│       ├── rnmc_indicadores_localidad.csv
+│       └── rnmc_indicadores_upz.csv
+├── <span class="folder">ECN_Encuesta Clima de los Negocios/</span>
+├── <span class="folder">Encuesta corredores estratégicos/</span>
+├── <span class="folder">Encuesta de movilidad y entornos urbanos/</span>
+├── <span class="folder">EPV_Encuesta de Percepción y Victimización/</span>
+├── <span class="folder">RNMC/</span>
+├── <span class="folder">Anexos y documentos de consulta/</span>
+└── <span class="file">plan_de_trabajo_reto2.html</span>   <span class="comment"># Este documento</span>
+    </div>
+
+    <h3>Instrucciones para empezar</h3>
+    <ol>
+        <li>Abrir terminal en la carpeta <code>codigo/</code></li>
+        <li>Crear entorno virtual: <code>python -m venv venv</code></li>
+        <li>Activar: <code>venv\Scripts\activate</code> (Windows) o <code>source venv/bin/activate</code> (Mac/Linux)</li>
+        <li>Instalar dependencias: <code>pip install -r requirements.txt</code></li>
+        <li>Ejecutar Notebook 1 completo</li>
+        <li>Luego ejecutar Notebook 2</li>
+    </ol>
+</div>
+
+<!-- ==================== 6. CRONOGRAMA ==================== -->
+<div class="section">
+    <h2>6. Cronograma (11 días: 4 Mar — 15 Mar 2026)</h2>
+
+    <div class="alerta alerta-roja">
+        <strong>⏰ DEADLINE:</strong> 15 de marzo de 2026, 11:59 PM. Enviar a <code>concurso.datosporlaseguridad@ccb.org.co</code>. Tres archivos: Informe (máx. 5,000 palabras), Código (.zip), Video pitch (máx. 5 min).
+    </div>
+
+    <div class="timeline">
+        <div class="timeline-item" data-day="D1-2">
+            <div class="dia-titulo">Días 1–2 (Mar 4–5): Exploración y Limpieza</div>
+            <ul>
+                <li>Leer los diccionarios de datos y cuestionarios</li>
+                <li>Ejecutar Notebook 01 completo</li>
+                <li>Validar que las variables se cargan correctamente</li>
+                <li>Revisar valores faltantes y decisiones de limpieza</li>
+                <li>Generar primeras estadísticas descriptivas</li>
+            </ul>
+        </div>
+
+        <div class="timeline-item" data-day="D3-4">
+            <div class="dia-titulo">Días 3–4 (Mar 6–7): Análisis Descriptivo</div>
+            <ul>
+                <li>Comparación Metro PLM vs. Calle 13 (tests de medias)</li>
+                <li>Comparación MiPymes vs. Grandes empresas</li>
+                <li>Análisis por segmento del Metro (16 tramos)</li>
+                <li>Visualizaciones clave (gráficos de barras, boxplots, heatmaps)</li>
+                <li>Análisis temporal ECN (2020–2024): tendencias de seguridad</li>
+            </ul>
+        </div>
+
+        <div class="timeline-item" data-day="D5-6">
+            <div class="dia-titulo">Días 5–6 (Mar 8–9): Modelos Econométricos</div>
+            <ul>
+                <li>Estimar Modelos 1–4 del Notebook 02</li>
+                <li>Interpretar coeficientes y efectos marginales</li>
+                <li>Validar supuestos (multicolinealidad, especificación)</li>
+                <li>Probar especificaciones alternativas</li>
+                <li>Documentar hallazgos de cada modelo</li>
+            </ul>
+        </div>
+
+        <div class="timeline-item" data-day="D7">
+            <div class="dia-titulo">Día 7 (Mar 10): Clustering</div>
+            <ul>
+                <li>Ejecutar clustering de segmentos del Metro</li>
+                <li>Validar clusters (silhouette, interpretabilidad)</li>
+                <li>Crear perfiles de cada cluster</li>
+                <li>Diseñar recomendaciones diferenciadas por cluster</li>
+                <li>Visualización final (PCA, heatmap)</li>
+            </ul>
+        </div>
+
+        <div class="timeline-item" data-day="D8-9">
+            <div class="dia-titulo">Días 8–9 (Mar 11–12): Redacción del Informe</div>
+            <ul>
+                <li>Redactar informe (máx. 5,000 palabras) siguiendo el formato CCB</li>
+                <li>Llenar ficha de presentación</li>
+                <li>Escribir introducción, metodología, resultados</li>
+                <li>Elaborar ruta de revisión para el jurado</li>
+                <li>Formular recomendaciones basadas en datos</li>
+                <li>Revisar y editar</li>
+            </ul>
+        </div>
+
+        <div class="timeline-item" data-day="D10">
+            <div class="dia-titulo">Día 10 (Mar 13): Video Pitch</div>
+            <ul>
+                <li>Guión del video (máx. 5 min)</li>
+                <li>Grabar presentación del equipo</li>
+                <li>Edición básica</li>
+                <li>Subir a WeTransfer o YouTube (no público)</li>
+            </ul>
+        </div>
+
+        <div class="timeline-item critico" data-day="D11">
+            <div class="dia-titulo">Día 11 (Mar 14–15): Revisión Final y Envío</div>
+            <ul>
+                <li><strong>Revisar que todo abra correctamente</strong></li>
+                <li>Comprimir código en .zip (SIN incluir las bases de datos originales)</li>
+                <li>Verificar que el video sea accesible</li>
+                <li>Enviar correo con los 3 archivos antes de las 11:59 PM del 15</li>
+                <li>Asunto del correo: <code>Nombre equipo; Nombre tutor; Universidad</code></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== 7. ENTREGABLES ==================== -->
+<div class="section">
+    <h2>7. Entregables (3 archivos)</h2>
+
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Entregable</th>
+            <th>Formato</th>
+            <th>Contenido</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td><strong>Informe de Análisis</strong></td>
+            <td>.docx o .pdf (máx. 5,000 palabras)</td>
+            <td>
+                <ol style="margin-left:15px">
+                    <li>Ficha de presentación</li>
+                    <li>Introducción</li>
+                    <li>Herramientas y métodos</li>
+                    <li>Ruta de revisión</li>
+                    <li>Análisis de datos y visualizaciones</li>
+                    <li>Recomendaciones</li>
+                    <li>Conclusiones</li>
+                </ol>
+            </td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td><strong>Código y Archivos de Soporte</strong></td>
+            <td>.zip</td>
+            <td>Notebooks, requirements.txt, figuras generadas. <strong>NO incluir</strong> las bases de datos originales de las encuestas.</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td><strong>Video Pitch</strong></td>
+            <td>Link (WeTransfer o YouTube)</td>
+            <td>Máximo 5 minutos. Presentación del equipo, resumen del análisis, hallazgos clave y propuesta.</td>
+        </tr>
+    </table>
+</div>
+
+<!-- ==================== 8. CHECKLIST FINAL ==================== -->
+<div class="section">
+    <h2>8. Checklist Final</h2>
+
+    <h3>Antes de enviar</h3>
+    <ul class="checklist">
+        <li>El informe no excede 5,000 palabras</li>
+        <li>La ficha de presentación está completamente diligenciada</li>
+        <li>La ruta de revisión es clara y permite seguir el análisis</li>
+        <li>Las visualizaciones son legibles y tienen título/leyenda</li>
+        <li>Las recomendaciones están fundamentadas en los datos</li>
+        <li>El código es reproducible (otro equipo puede ejecutarlo)</li>
+        <li>El .zip del código NO incluye las bases de datos originales</li>
+        <li>El requirements.txt está actualizado</li>
+        <li>El video no excede 5 minutos</li>
+        <li>El link del video es accesible (verificar en incógnito)</li>
+        <li>El correo tiene el asunto correcto: <code>Equipo; Tutor; Universidad</code></li>
+        <li>Solo 3 archivos adjuntos</li>
+    </ul>
+</div>
+
+<!-- ==================== 9. TIPS ==================== -->
+<div class="section">
+    <h2>9. Tips y Recomendaciones</h2>
+
+    <div class="alerta">
+        <strong>🎯 Enfoque &gt; Cobertura:</strong> Es mejor un análisis profundo de 2 fuentes que un análisis superficial de 6. Prioricen la Encuesta de Corredores y la ECN.
+    </div>
+
+    <h3>Para el análisis</h3>
+    <ul>
+        <li><strong>Usen los factores de expansión</strong> cuando reporten estadísticas poblacionales (FACTOR_1, FACTOR_2 en EMU; FEX en EPV; FACTOR_TOTAL en ECN).</li>
+        <li><strong>No olviden los efectos marginales</strong> en los modelos Logit. Los coeficientes crudos no son interpretables directamente como cambios en probabilidad.</li>
+        <li><strong>El clustering es descriptivo, no causal.</strong> Úsenlo para proponer intervenciones diferenciadas, no para demostrar causalidad.</li>
+        <li><strong>Cruces creativos:</strong> Pueden cruzar los indicadores de RNMC por localidad/UPZ con los datos de percepción de la EPV para contrastar datos objetivos vs. subjetivos.</li>
+        <li><strong>Lean los cuestionarios PDF.</strong> Entender exactamente qué se le preguntó a la gente es fundamental para interpretar las variables.</li>
+    </ul>
+
+    <h3>Para el informe</h3>
+    <ul>
+        <li><strong>Cuenten una historia.</strong> No es una lista de regresiones; es un argumento basado en evidencia.</li>
+        <li><strong>Visualizaciones &gt; Tablas.</strong> El jurado procesará mejor un buen gráfico que una tabla de coeficientes.</li>
+        <li><strong>Sean concretos en las recomendaciones.</strong> "Mejorar la iluminación en los segmentos X, Y del Metro" es mejor que "mejorar la seguridad".</li>
+        <li><strong>Usen el clustering para focalizar.</strong> Cada cluster puede tener una intervención específica.</li>
+    </ul>
+
+    <h3>Para el video</h3>
+    <ul>
+        <li>Estructuren: Problema → Datos → Método → Hallazgos → Recomendaciones</li>
+        <li>Incluyan 2-3 visualizaciones clave (no más)</li>
+        <li>Practiquen el timing: 5 minutos pasan rápido</li>
+    </ul>
+</div>
+
+<!-- ==================== FOOTER ==================== -->
+<div class="footer">
+    <p>Plan de trabajo generado el 3 de marzo de 2026</p>
+    <p>Concurso de Datos por la Seguridad — Cámara de Comercio de Bogotá</p>
+</div>
+
+</div>
+</body>
+</html>

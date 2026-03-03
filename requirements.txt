@@ -1,12 +1,33 @@
-contourpy==1.3.3
-cycler==0.12.1
-fonttools==4.61.1
-kiwisolver==1.4.9
-matplotlib==3.10.8
-numpy==2.4.1
-packaging==26.0
-pandas==3.0.0
-pillow==12.1.0
-pyparsing==3.3.2
-python-dateutil==2.9.0.post0
-six==1.17.0
+# =============================================================================
+# Reto 2: Seguridad y Obras Públicas - Bogotá
+# Concurso de Datos por la Seguridad - CCB
+# =============================================================================
+# Instalar con: pip install -r requirements.txt
+
+# --- Core ---
+pandas>=2.0.0
+numpy>=1.24.0
+openpyxl>=3.1.0          # Leer archivos .xlsx
+
+# --- Visualización ---
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.15.0            # Gráficos interactivos
+
+# --- Econometría y Estadística ---
+statsmodels>=0.14.0       # OLS, Logit, Probit, tests
+scipy>=1.10.0             # Tests estadísticos
+linearmodels>=5.0         # Modelos de panel (si se usa)
+
+# --- Machine Learning / Clustering ---
+scikit-learn>=1.3.0       # KMeans, DBSCAN, PCA, métricas
+
+# --- Geoespacial (opcional) ---
+geopandas>=0.13.0       # Mapas y análisis espacial
+folium>=0.14.0          # Mapas interactivos
+
+# --- Utilidades ---
+jupyter>=1.0.0
+ipykernel>=6.0.0
+python-docx>=0.8.11       # Leer diccionarios .docx
+tqdm>=4.65.0               # Barras de progreso
